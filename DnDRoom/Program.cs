@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper;
+using DnDRoom.Mapping;
 
 namespace DnDRoom
 {
@@ -53,6 +55,8 @@ namespace DnDRoom
 
             builder.Services.AddTransient<IRoomRepo, RoomRepo>();
             builder.Services.AddTransient<IRoomService, RoomService>();
+
+            builder.Services.AddSingleton<IMapper>(MappingHelper.GetMapper());
 
             //builder.Services.AddEndpointsApiExplorer();
             //builder.Services.AddSwaggerGen();

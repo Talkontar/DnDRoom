@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnDRoom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230105040308_init")]
-    partial class init
+    [Migration("20230111125606_addManyToManyRoomUser")]
+    partial class addManyToManyRoomUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,7 @@ namespace DnDRoom.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
@@ -44,6 +45,21 @@ namespace DnDRoom.Data.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("DnDRoom.Contracts.Room_User", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("room_Users");
                 });
 
             modelBuilder.Entity("DnDRoom.Contracts.User", b =>
@@ -247,12 +263,31 @@ namespace DnDRoom.Data.Migrations
             modelBuilder.Entity("DnDRoom.Contracts.Room", b =>
                 {
                     b.HasOne("DnDRoom.Contracts.User", "Owner")
-                        .WithMany("Rooms")
+                        .WithMany("CreatedRooms")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DnDRoom.Contracts.Room_User", b =>
+                {
+                    b.HasOne("DnDRoom.Contracts.Room", "Room")
+                        .WithMany("Players")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DnDRoom.Contracts.User", "User")
+                        .WithMany("ConnectedRooms")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -306,9 +341,16 @@ namespace DnDRoom.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DnDRoom.Contracts.Room", b =>
+                {
+                    b.Navigation("Players");
+                });
+
             modelBuilder.Entity("DnDRoom.Contracts.User", b =>
                 {
-                    b.Navigation("Rooms");
+                    b.Navigation("ConnectedRooms");
+
+                    b.Navigation("CreatedRooms");
                 });
 #pragma warning restore 612, 618
         }

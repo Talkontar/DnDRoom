@@ -9,6 +9,10 @@ namespace DnDRoom.Data
 {
     public interface IRoomRepo
     {
-        Task Add(Room room);
+        Task Create(Room room);
+        Task<Room?> GetById(int id);
+        Task Delete(Room room);
+        Task AddPlayer(Room room, User newPlayer);
+        List<User> GetPlayers(Room room);
     }
 }

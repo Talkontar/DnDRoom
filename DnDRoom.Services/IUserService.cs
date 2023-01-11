@@ -13,6 +13,7 @@ namespace DnDRoom.Services
     {
         public Task<IActionResult> Create(RegisterModel registerModel);
         public Task<IActionResult> Login(LoginRequest loginRequest);
-        public Task<User> GetById(string Id);
+        public Task<User> GetById(string id);
+        public Task<IEnumerable<Room>> GetCreatedRooms(string id);
     }
 }

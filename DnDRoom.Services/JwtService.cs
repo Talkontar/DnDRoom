@@ -14,6 +14,7 @@ namespace DnDRoom.Services
 {
     public class JwtService : IJwtService
     {
+        //todo: transfer to conf
         private const int EXPIRATION_MINUTES = 30;
 
         private readonly IConfiguration _configuration;

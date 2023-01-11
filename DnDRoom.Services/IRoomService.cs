@@ -11,6 +11,9 @@ namespace DnDRoom.Services
 {
     public interface IRoomService
     {
-        public Task<Room> create(RoomCreateRequest roomCreateRequest, string ownerId);
+        Task<Room> Create(RoomCreateRequest roomCreateRequest, string ownerId);
+        Task Delete(int id);
+        Task<Room?> GetById(int id);
+        Task AddPlayer(int roomId, string playerId);
     }
 }

@@ -16,10 +16,39 @@ namespace DnDRoom.Data
             _context = context;
         }
 
-        public async Task Add(Room room)
+        public async Task Create(Room room)
         {
             _context.Add(room); 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task Delete(Room room)
+        {
+            _context.Remove(room);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Room?> GetById(int id)
+        {
+            return await _context.FindAsync<Room>(id);
+        }
+
+        public async Task AddPlayer(Room room, User newPlayer)
+        {
+            room.Players.Add(new Room_User()
+            {
+                Room = room,
+                RoomId = room.Id,
+
+                User = newPlayer,
+                UserId = newPlayer.Id
+            });
+            await _context.SaveChangesAsync();
+        }
+
+        public List<User> GetPlayers(Room room)
+        {
+            return room.Players.Select(x => x.User).ToList();
         }
     }
 }

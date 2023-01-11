@@ -4,6 +4,7 @@ using DnDRoom.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -69,6 +70,12 @@ namespace DnDRoom.Services
         public async Task<User> GetById(string Id)
         {
             return await _userManager.FindByIdAsync(Id);
+        }
+
+        public async Task<IEnumerable<Room>> GetCreatedRooms(string userId)
+        {
+            var user = _userManager.Users.Include(x => x.CreatedRooms).FirstOrDefault(x => x.Id == userId);
+            return user.CreatedRooms;
         }
     }
 }

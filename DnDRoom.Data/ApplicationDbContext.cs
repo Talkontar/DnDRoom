@@ -8,9 +8,8 @@ namespace DnDRoom.Data
     public class ApplicationDbContext : IdentityDbContext<User>
     {
         public DbSet<Room> Rooms { get; set; }
-#pragma warning disable CS8618 // Поле, не допускающее значения NULL, должно содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающее значения NULL.
+        public DbSet<Room_User> room_Users { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-#pragma warning restore CS8618 // Поле, не допускающее значения NULL, должно содержать значение, отличное от NULL, при выходе из конструктора. Возможно, стоит объявить поле как допускающее значения NULL.
         {
         }
 
@@ -20,15 +19,26 @@ namespace DnDRoom.Data
 
             //Users
             var userModel = modelBuilder.Entity<User>();
-            userModel.HasMany<Room>(x => x.Rooms)
-                .WithOne(x => x.Owner);
+            
 
             //Rooms
             var roomModel = modelBuilder.Entity<Room>();
             roomModel.HasKey(x => x.Id);
-            roomModel.HasOne<User>(x => x.Owner)
-                .WithMany(x => x.Rooms);
+            roomModel.HasOne<User>(r => r.Owner)
+                .WithMany(u => u.CreatedRooms)
+                .HasForeignKey(r => r.OwnerId);
             roomModel.Property(x => x.Name);
+
+            //Room_User
+            var Room_UserModel = modelBuilder.Entity<Room_User>();
+            Room_UserModel.HasKey(x => new { x.UserId, x.RoomId });
+            //Room_UserModel.HasKey(x => x.Id);
+            Room_UserModel.HasOne(x => x.Room)
+                .WithMany(r => r.Players)
+                .HasForeignKey(x => x.RoomId);
+            Room_UserModel.HasOne(x => x.User)
+                .WithMany(u => u.ConnectedRooms)
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

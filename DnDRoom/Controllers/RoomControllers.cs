@@ -57,5 +57,17 @@ namespace DnDRoom.Controllers
             await _roomService.AddPlayer(roomId, User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "");
             return NoContent();
         }
+
+        [Authorize]
+        [HttpPost("{roomId}/createCharacter")]
+        public async Task<IActionResult> CreateCharacter(
+            [FromBody] CharacterCreateRequest characterCreateRequest,
+            [FromRoute] int roomId)
+        {
+            await _roomService.CreatePlayerCharacter(characterCreateRequest,
+                User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "",
+                roomId);
+            return Ok();
+        }
     }
 }

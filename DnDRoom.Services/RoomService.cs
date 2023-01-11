@@ -12,15 +12,16 @@ namespace DnDRoom.Services
     public class RoomService : IRoomService
     {
         private readonly IUserService _userService;
-
         private readonly IRoomRepo _roomRepo;
-
+        private readonly ICharacterService _characterService;
         public RoomService(
             IUserService userService, 
-            IRoomRepo roomRepo)
+            IRoomRepo roomRepo,
+            ICharacterService characterService)
         {
             _userService = userService;
             _roomRepo = roomRepo;
+            _characterService = characterService;
         }
 
         public async Task<Room> Create(RoomCreateRequest roomCreateRequest, string ownerId)
@@ -72,12 +73,44 @@ namespace DnDRoom.Services
                 throw new Exception($"user with id {playerId} not found");
             }
 
-            if(_roomRepo.GetPlayers(room).Any(x => x.Id == playerId))
+            if (_roomRepo.GetPlayers(room).Any(x => x.Id == playerId))
             {
                 throw new Exception($"user {playerId} already in room {roomId}");
             }
 
             await _roomRepo.AddPlayer(room, player);
+        }
+
+        public async Task CreatePlayerCharacter(CharacterCreateRequest characterCreateRequest, string playerId, int roomId)
+        {
+            var room = await _roomRepo.GetById(roomId);
+            var player = await _userService.GetById(playerId);
+
+            if (room is null)
+            {
+                throw new Exception($"room with id {roomId} not found");
+            }
+            if (string.IsNullOrEmpty(playerId))
+            {
+                throw new Exception($"user with id {playerId} not found");
+            }
+
+            if (playerId == room.OwnerId)
+            {
+                throw new Exception("room owner can not create player characters");
+            }
+
+            if (!_roomRepo.GetPlayers(room).Any(x => x.Id == playerId))
+            {
+                throw new Exception($"thare no user {playerId} in room {roomId}");
+            }
+
+            if (_roomRepo.GetPlayerCharacters(room).Any(x => x.OwnerId == playerId))
+            {
+                throw new Exception($"user {playerId} already have character in room {roomId}");
+            }
+
+            await _characterService.Create(characterCreateRequest, player, room);
         }
     }
 }

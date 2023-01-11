@@ -1,4 +1,5 @@
 ﻿using DnDRoom.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace DnDRoom.Data
 
         public async Task Create(Room room)
         {
-            _context.Add(room); 
+            await _context.AddAsync(room); 
             await _context.SaveChangesAsync();
         }
 
@@ -35,20 +36,18 @@ namespace DnDRoom.Data
 
         public async Task AddPlayer(Room room, User newPlayer)
         {
-            room.Players.Add(new Room_User()
-            {
-                Room = room,
-                RoomId = room.Id,
-
-                User = newPlayer,
-                UserId = newPlayer.Id
-            });
+            room.Players.Add(newPlayer);
             await _context.SaveChangesAsync();
         }
 
         public List<User> GetPlayers(Room room)
         {
-            return room.Players.Select(x => x.User).ToList();
+            return _context.Rooms.Include(x => x.Players).Single(x => x == room).Players.ToList();
+        }
+
+        public List<Character> GetPlayerCharacters(Room room)
+        {
+            return _context.Rooms.Include(x => x.PlayerCharacters).Single(x => x == room).PlayerCharacters.ToList();
         }
     }
 }

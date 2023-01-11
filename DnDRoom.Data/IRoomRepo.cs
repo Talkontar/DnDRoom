@@ -14,5 +14,6 @@ namespace DnDRoom.Data
         Task Delete(Room room);
         Task AddPlayer(Room room, User newPlayer);
         List<User> GetPlayers(Room room);
+        List<Character> GetPlayerCharacters(Room room);
     }
 }

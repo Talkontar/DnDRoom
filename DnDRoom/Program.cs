@@ -56,6 +56,9 @@ namespace DnDRoom
             builder.Services.AddTransient<IRoomRepo, RoomRepo>();
             builder.Services.AddTransient<IRoomService, RoomService>();
 
+            builder.Services.AddTransient<ICharacterRepo, CharacterRepo>();
+            builder.Services.AddTransient<ICharacterService, CharacterService>();
+
             builder.Services.AddSingleton<IMapper>(MappingHelper.GetMapper());
 
             //builder.Services.AddEndpointsApiExplorer();

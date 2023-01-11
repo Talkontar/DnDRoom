@@ -15,8 +15,9 @@ namespace DnDRoom.Tests
         public void Create_invalidInputParameters_Exception()
         {
             //arrange
-            RoomService service = new RoomService(NSubstitute.Substitute.For<IUserService>(), 
-                NSubstitute.Substitute.For<IRoomRepo>());
+            RoomService service = new RoomService(NSubstitute.Substitute.For<IUserService>(),
+                NSubstitute.Substitute.For<IRoomRepo>(),
+                NSubstitute.Substitute.For<ICharacterService>());
             //Act
             Assert.ThrowsAsync<Exception>(() => service.Create(null, "123"));
             Assert.ThrowsAsync<Exception>(() => service.Create(new RoomCreateRequest("test"), null));

@@ -59,7 +59,7 @@ namespace DnDRoom.Data.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("room_Users");
+                    b.ToTable("Room_Users");
                 });
 
             modelBuilder.Entity("DnDRoom.Contracts.User", b =>

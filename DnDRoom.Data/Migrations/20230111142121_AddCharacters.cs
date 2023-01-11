@@ -4,28 +4,31 @@
 
 namespace DnDRoom.Data.Migrations
 {
-    public partial class addManyToManyRoomUser : Migration
+    public partial class AddCharacters : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Room_Users",
+                name: "Characters",
                 columns: table => new
                 {
-                    RoomId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_room_Users", x => new { x.UserId, x.RoomId });
+                    table.PrimaryKey("PK_Characters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_room_Users_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Characters_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_room_Users_Rooms_RoomId",
+                        name: "FK_Characters_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
@@ -33,15 +36,20 @@ namespace DnDRoom.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_room_Users_RoomId",
-                table: "Room_Users",
+                name: "IX_Characters_OwnerId",
+                table: "Characters",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Characters_RoomId",
+                table: "Characters",
                 column: "RoomId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Room_Users");
+                name: "Characters");
         }
     }
 }

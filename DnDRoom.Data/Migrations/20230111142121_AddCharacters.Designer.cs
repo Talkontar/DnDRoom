@@ -4,6 +4,7 @@ using DnDRoom.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DnDRoom.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230111142121_AddCharacters")]
+    partial class AddCharacters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,6 +73,21 @@ namespace DnDRoom.Data.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Rooms");
+                });
+
+            modelBuilder.Entity("DnDRoom.Contracts.Room_User", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Room_Users");
                 });
 
             modelBuilder.Entity("DnDRoom.Contracts.User", b =>
@@ -271,21 +288,6 @@ namespace DnDRoom.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RoomUser", b =>
-                {
-                    b.Property<int>("ConnectedRoomsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PlayersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ConnectedRoomsId", "PlayersId");
-
-                    b.HasIndex("PlayersId");
-
-                    b.ToTable("RoomUser");
-                });
-
             modelBuilder.Entity("DnDRoom.Contracts.Character", b =>
                 {
                     b.HasOne("DnDRoom.Contracts.User", "Owner")
@@ -314,6 +316,25 @@ namespace DnDRoom.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DnDRoom.Contracts.Room_User", b =>
+                {
+                    b.HasOne("DnDRoom.Contracts.Room", "Room")
+                        .WithMany("Players")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DnDRoom.Contracts.User", "User")
+                        .WithMany("ConnectedRooms")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -367,28 +388,17 @@ namespace DnDRoom.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoomUser", b =>
-                {
-                    b.HasOne("DnDRoom.Contracts.Room", null)
-                        .WithMany()
-                        .HasForeignKey("ConnectedRoomsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DnDRoom.Contracts.User", null)
-                        .WithMany()
-                        .HasForeignKey("PlayersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DnDRoom.Contracts.Room", b =>
                 {
                     b.Navigation("PlayerCharacters");
+
+                    b.Navigation("Players");
                 });
 
             modelBuilder.Entity("DnDRoom.Contracts.User", b =>
                 {
+                    b.Navigation("ConnectedRooms");
+
                     b.Navigation("CreatedCharacters");
 
                     b.Navigation("CreatedRooms");

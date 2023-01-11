@@ -15,5 +15,6 @@ namespace DnDRoom.Services
         Task Delete(int id);
         Task<Room?> GetById(int id);
         Task AddPlayer(int roomId, string playerId);
+        Task CreatePlayerCharacter(CharacterCreateRequest characterCreateRequest, string ownerId, int roomId);
     }
 }

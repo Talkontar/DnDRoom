@@ -11,8 +11,7 @@ namespace DnDRoom.Contracts
     public class User : IdentityUser
     {
         public List<Room> CreatedRooms { get; set; }
-        [NotMapped]
-        public List<Room_User> ConnectedRooms { get; set; }
-
+        public List<Room> ConnectedRooms { get; set; }
+        public List<Character> CreatedCharacters { get; set; }
     }
 }

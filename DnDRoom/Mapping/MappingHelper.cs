@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DnDRoom.Contracts;
-using DnDRoom.Models;
+using DnDRoom.Models.ViewModels;
 
 namespace DnDRoom.Mapping
 {

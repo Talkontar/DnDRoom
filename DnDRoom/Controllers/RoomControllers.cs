@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using DnDRoom.Contracts;
-using DnDRoom.Models;
-using DnDRoom.Services;
+using DnDRoom.Models.Requests;
+using DnDRoom.Models.ViewModels;
+using DnDRoom.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

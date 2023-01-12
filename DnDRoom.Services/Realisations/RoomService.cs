@@ -1,13 +1,14 @@
 ﻿using DnDRoom.Contracts;
-using DnDRoom.Data;
-using DnDRoom.Models;
+using DnDRoom.Data.interfaces;
+using DnDRoom.Models.Requests;
+using DnDRoom.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Services
+namespace DnDRoom.Services.Realisations
 {
     public class RoomService : IRoomService
     {
@@ -15,7 +16,7 @@ namespace DnDRoom.Services
         private readonly IRoomRepo _roomRepo;
         private readonly ICharacterService _characterService;
         public RoomService(
-            IUserService userService, 
+            IUserService userService,
             IRoomRepo roomRepo,
             ICharacterService characterService)
         {
@@ -25,8 +26,8 @@ namespace DnDRoom.Services
         }
 
         public async Task<Room> Create(RoomCreateRequest roomCreateRequest, string ownerId)
-        { 
-            if(roomCreateRequest is null)
+        {
+            if (roomCreateRequest is null)
             {
                 throw new Exception($"{nameof(roomCreateRequest)} can not be null");
             }
@@ -53,7 +54,7 @@ namespace DnDRoom.Services
         public async Task Delete(int id)
         {
             Room? room = await _roomRepo.GetById(id);
-            if(room is not null)
+            if (room is not null)
             {
                 await _roomRepo.Delete(room);
             }

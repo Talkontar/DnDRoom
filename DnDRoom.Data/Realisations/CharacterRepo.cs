@@ -1,11 +1,12 @@
 ﻿using DnDRoom.Contracts;
+using DnDRoom.Data.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Data
+namespace DnDRoom.Data.Realisations
 {
     public class CharacterRepo : ICharacterRepo
     {
@@ -16,9 +17,11 @@ namespace DnDRoom.Data
             _context = context;
         }
 
-        public async Task Create (Character character)
+        public async Task Create(Character character)
         {
-            await _context.AddAsync<Character>(character);
+            throw new Exception();
+            //todo change addAsync to add
+            await _context.AddAsync(character);
             await _context.SaveChangesAsync();
         }
     }

@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Models
+namespace DnDRoom.Models.Requests
 {
-    public class RegisterModel
+    public class LoginRequest
     {
-        [Required, MaxLength(50)]
-        public string? UserName { get; set; }
-        [Required, DataType(DataType.EmailAddress)]
+        [Required]
+        [EmailAddress]
         public string? Email { get; set; }
-        [Required, DataType(DataType.Password)]
+        [Required]
         public string? Password { get; set; }
     }
 }

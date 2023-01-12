@@ -1,4 +1,5 @@
-﻿using DnDRoom.Models;
+﻿using DnDRoom.Models.Responses;
+using DnDRoom.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Services
+namespace DnDRoom.Services.Realisations
 {
     public class JwtService : IJwtService
     {

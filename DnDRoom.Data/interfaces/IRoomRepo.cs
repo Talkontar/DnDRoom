@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Data
+namespace DnDRoom.Data.interfaces
 {
     public interface IRoomRepo
     {

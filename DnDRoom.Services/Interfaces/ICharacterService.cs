@@ -1,12 +1,12 @@
 ﻿using DnDRoom.Contracts;
-using DnDRoom.Models;
+using DnDRoom.Models.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Services
+namespace DnDRoom.Services.Interfaces
 {
     public interface ICharacterService
     {

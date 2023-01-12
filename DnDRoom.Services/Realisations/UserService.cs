@@ -1,6 +1,7 @@
 ﻿using DnDRoom.Contracts;
-using DnDRoom.Data;
-using DnDRoom.Models;
+using DnDRoom.Data.interfaces;
+using DnDRoom.Models.Requests;
+using DnDRoom.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -10,7 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace DnDRoom.Services
+namespace DnDRoom.Services.Realisations
 {
     public class UserService : IUserService
     {
@@ -31,22 +32,23 @@ namespace DnDRoom.Services
             _signInManager = signInManager;
         }
 
-        public async Task<IActionResult> Create(RegisterModel registerModel)
+        public async Task<IActionResult> Create(RegisterRequest registerRequest)
         {
-            
+
             User newUser = new User
             {
-                Email = registerModel.Email,
-                UserName = registerModel.UserName,
+                Email = registerRequest.Email,
+                UserName = registerRequest.UserName,
             };
 
-            IdentityResult result = await _userManager.CreateAsync(newUser, registerModel.Password);
-            if(!result.Succeeded)
+            IdentityResult result = await _userManager.CreateAsync(newUser, registerRequest.Password);
+            if (!result.Succeeded)
             {
                 return new BadRequestObjectResult(result.Errors);
             }
-            registerModel.Password = null;
-            return new CreatedResult("", registerModel);
+            //todo make vm
+            registerRequest.Password = null;
+            return new CreatedResult("", registerRequest);
         }
 
         public async Task<IActionResult> Login(LoginRequest loginRequest)

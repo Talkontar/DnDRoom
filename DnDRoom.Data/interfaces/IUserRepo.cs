@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Models
+namespace DnDRoom.Data.interfaces
 {
-    public class CharacterCreateRequest
+    public interface IUserRepo
     {
-        public string Name { get; set; }
     }
 }

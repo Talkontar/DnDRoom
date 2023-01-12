@@ -1,5 +1,5 @@
-﻿using DnDRoom.Models;
-using DnDRoom.Services;
+﻿using DnDRoom.Models.Requests;
+using DnDRoom.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +26,7 @@ namespace DnDRoom.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel register)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest register)
         {
             if (!ModelState.IsValid)
             {
@@ -38,6 +38,8 @@ namespace DnDRoom.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> login([FromBody] LoginRequest loginRequest)
         {
+            //todo use filters
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

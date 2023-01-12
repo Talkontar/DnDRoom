@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DnDRoom.Models
+namespace DnDRoom.Models.ViewModels
 {
     public class RoomViewModel
     {
